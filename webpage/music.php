@@ -15,26 +15,50 @@
     <ul id="musiclist">
 	  <?php
 		function displaySongs(){
-		  if(!isset($_REQUEST['playlist']))
+		  if(!isset($_REQUEST['playlist'])){
 		  	$musicFolder = glob("songs/*.mp3");
-		  else
+		  	$valid = false;
+		  }
+		  else{
 			$musicFolder = file('songs/' . $_REQUEST['playlist'], FILE_IGNORE_NEW_LINES);
+			$valid = true;
+		  }
 		foreach ($musicFolder as $mp3) { 
-		  $size = filesize("songs/".$mp3);
-		  if ($size > 0 && $size < 1024){
-		  	$size = $size . " b";
-		  }
-		  elseif ($size > 1024 && $size < 1048575){
-		  	$size = round($size / 1024, 2) . " kb";
-		  }
-		  elseif ($size > 1048575){
-		  	$size = round($size / 1048575, 2) . " mb";
-		  }
-		    if (!in_array($mp3,array(".",".."))){ 
-		  ?>
-		  <li class="mp3item"><a href="songs/<?= basename($mp3) ?>">
-		  	<?= basename($mp3) . " (" . $size . " )" ; ?></a></li>
-		  <?php
+		  if (!$valid) {
+			  $size = filesize($mp3);
+			  if ($size > 0 && $size < 1024){
+			  	$size = $size . " b";
+			  }
+			  elseif ($size > 1024 && $size < 1048575){
+			  	$size = round($size / 1024, 2) . " kb";
+			  }
+			  elseif ($size > 1048575){
+			  	$size = round($size / 1048575, 2) . " mb";
+			  }
+			    if (!in_array($mp3,array(".",".."))){ 
+			  ?>
+			  <li class="mp3item"><a href="songs/<?= basename($mp3) ?>">
+			  	<?= basename($mp3) . " (" . $size . " )" ; ?></a></li>
+			  <?php
+			  }
+			}
+			else{
+				$size = filesize("songs/".$mp3);
+			  if ($size > 0 && $size < 1024){
+			  	$size = $size . " b";
+			  }
+			  elseif ($size > 1024 && $size < 1048575){
+			  	$size = round($size / 1024, 2) . " kb";
+			  }
+			  elseif ($size > 1048575){
+			  	$size = round($size / 1048575, 2) . " mb";
+			  }
+			    if (!in_array($mp3,array(".",".."))){ 
+			  ?>
+			  <li class="mp3item"><a href="songs/<?= basename($mp3) ?>">
+			  	<?= basename($mp3) . " (" . $size . " )" ; ?></a></li>
+			  	<?php
+			  }
 			}
 		  }
 	    }
@@ -55,7 +79,7 @@
 	  <?php 
 	  	displaySongs();
 	  	if(!isset($_REQUEST['playlist']))
-	  	displayPlaylist();
+	  		displayPlaylist();
 	   ?>
 	</ul>
   </div>
